@@ -1,30 +1,36 @@
+const program = require('commander')
 const CoinbasePro = require('coinbase-pro')
 const config = require('./configuration')
+const Historical = require('./src/historical')
 
-const key = config.COINBASE_PRO_API_KEY
-const secret = config.COINBASE_PRO_API_SECRET
-const passphrase = config.COINBASE_PRO_API_PASSPHRASE
-const apiUri = config.COINBASE_PRO_API_URI
+const now = new Date()
+const yesterday = new Date(now.getTime() - (24 * 60 * 60 * 1e3))
 
-const client = new CoinbasePro.PublicClient();
-const authedClient = new CoinbasePro.AuthenticatedClient(
-    key,
-    secret,
-    passphrase,
-    apiUri
-  );
+function toDate(val) {
+    return new Date(val * 1e3)
+}
 
-  const product = 'BTC-GBP'
+program.version('1.0.0')
+    .option('-i, --interval [interval]', 'Interval in seconds for candlestick', parseInt)
+    .option('-p, --product [product]', 'Product identifier', 'BTC-GBP')
+    .option('-s, --start [start]', 'Start time in unix seconds', toDate, yesterday)
+    .option('-e, --end [end]', 'End time in unix seconds', toDate, now)
+    .parse(process.argv)
 
-  async function historicalRates() {
-      const results = await client.getProductHistoricRates(
-        product,
-        { granularity: 300 },
-      );
-      console.log(results);
-      
-  }
+const main = async function() {
+    const { interval, product, start, end } = program
+       
+    const service = new Historical({ 
+        start, 
+        end, 
+        interval, 
+        product
+    })
+    
+    const data = await service.getData()
+    console.log(data);
+    
+}
 
-historicalRates()
-  
+main()
   
