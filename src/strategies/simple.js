@@ -22,10 +22,11 @@ class SimpleStrategy extends Strategy {
         } else if ( last > penu ) {
                 
             open.forEach(p => {
-                
-                this.onSellSignal({ 
-                    price, size: p.enter.size, time, position: p
-                })
+                if (p.enter.price * 1.01 < price) {
+                    this.onSellSignal({ 
+                        price, size: p.enter.size, time, position: p
+                    })
+                }
             })
         }
     } 

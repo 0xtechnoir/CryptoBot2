@@ -2,6 +2,7 @@ const Candelstick = require('../models/candelsticks/candlestick')
 const Historical = require('../historical')
 const { Simple } = require('../strategies')
 const randomString = require('randomstring')
+const colors = require('colors/safe')
 
 class Backtester {
     constructor({ start, end, interval, product}) {
@@ -30,6 +31,21 @@ class Backtester {
                     sticks, time: stick.startTime
                 })
             }))
+
+            const positions = this.strategy.getPositions()
+            positions.forEach((p) => {
+                p.print()
+            });
+
+            const total = positions.reduce((r, p) => {
+                return r + p.profit()
+            }, 0)
+
+            const prof = `${total}`
+            const colored = total > 0 ? colors.green(prof) : colors.red(prof)
+            console.log(`Total Profit: ${colored}`);
+            
+
         } catch (error) {
             console.log(error);           
         }
