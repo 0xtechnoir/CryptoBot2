@@ -1,5 +1,5 @@
 const coinbase = require('coinbase-pro')
-const Candlestick = require('../models/candlestick')
+const Candlestick = require('../models/candelsticks/candlestick')
 
 function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms))
@@ -79,10 +79,11 @@ class HistoricalService {
         const max = 300
         // get the requested time period in seconds
         const delta = (this.end.getTime() - this.start.getTime()) * 1e-3
+        
         // calculate the number of intervals in the time period
         const numberIntervals = delta / this.interval
         // console.log(`Number of Intervals in chosen time frame: ${numberIntervals}`); // eg 436.47746
-
+        
         // Calculate the number of requests we need to make to get a data point on each interval.
         const numberRequests = Math.ceil(numberIntervals / max)
         // console.log(`Number of Requests: ${numberRequests}`); // eg 2

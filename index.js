@@ -1,7 +1,7 @@
 const program = require('commander')
 const CoinbasePro = require('coinbase-pro')
 const config = require('./configuration')
-const Historical = require('./src/historical')
+const Backtester = require('./src/backtester')
 
 const now = new Date()
 const yesterday = new Date(now.getTime() - (24 * 60 * 60 * 1e3))
@@ -11,7 +11,7 @@ function toDate(val) {
 }
 
 program.version('1.0.0')
-    .option('-i, --interval [interval]', 'Interval in seconds for candlestick', parseInt)
+    .option('-i, --interval [interval]', 'Interval in seconds for candlestick', parseInt, 300)
     .option('-p, --product [product]', 'Product identifier', 'BTC-GBP')
     .option('-s, --start [start]', 'Start time in unix seconds', toDate, yesterday)
     .option('-e, --end [end]', 'End time in unix seconds', toDate, now)
@@ -20,15 +20,11 @@ program.version('1.0.0')
 const main = async function() {
     const { interval, product, start, end } = program
        
-    const service = new Historical({ 
-        start, 
-        end, 
-        interval, 
-        product
+    const tester = new Backtester({
+        start, end, product, interval
     })
-    
-    const data = await service.getData()
-    console.log(data);
+      
+    await tester.start()
     
 }
 
