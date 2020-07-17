@@ -19,6 +19,8 @@
   "homepage": "https://github.com/bnaylor1989/CryptoBot2#readme",
   "dependencies": {
     "coinbase-pro": "^0.9.0",
-    "commander": "^5.1.0"
+    "colors": "^1.4.0",
+    "commander": "^5.1.0",
+    "randomstring": "^1.1.5"
   }
 }
