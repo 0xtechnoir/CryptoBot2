@@ -6,6 +6,8 @@ const tulind = require('tulind')
 class SimpleMACD extends Strategy {
     async run({ sticks, time }) {
 
+        console.log("Running on SimpleMACD Strategy");
+        
         const prices = sticks.map(stick => stick.average())
 
         const shortPeriod = 12
@@ -18,8 +20,7 @@ class SimpleMACD extends Strategy {
         const histogram = results[2]
         const signal = results[1]
         const macd = results[0]
-
-
+        
         const length = histogram.length
         if (length < 2) { return }
 
@@ -39,14 +40,30 @@ class SimpleMACD extends Strategy {
         const price = sticks[sticks.length - 1].close
 
         if (open.length == 0) {
+     
+            console.log("No open positions");
+            console.log(`Boundary: ${boundary}`);
+            console.log(`Penultimate: ${penultimate}`);
+            console.log(`Last: ${last}`);
+
+            console.log(`Was Above: ${wasAbove}`);
+            console.log(`Is Below: ${isBelow}`);
+
             if (wasAbove && isBelow) {
+                console.log("Lets buy");
+                
                 this.onBuySignal({ price, time })
             }
         } else {
+
+            console.log("We have open poistions");
+            
             open.forEach(p => {
                 if (isAbove && wasBelow) {
                     open.forEach(p => {
                         if (price > p.enter.price * 1.02) {
+                            console.log("We should sell");
+                            
                             this.onSellSignal({ price, time, size: p.enter.size, position: p })
                         }
                     })

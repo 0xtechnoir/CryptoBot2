@@ -18,7 +18,7 @@ class Position {
 
         var profit = ''
         if (this.state === 'closed') {
-            const prof = `${this.profit()}`
+            const prof = `${this.profitString()}`
             const colored = this.profit() > 0 ? colors.green(prof) : colors.red(prof)
             profit = `Profit ${colored}`
         }
@@ -30,9 +30,12 @@ class Position {
     profit() {
         const fee = 0.0025
         const entrance = (this.enter.price) * (1 + fee)
+        console.log("Entrance Fee: " + (entrance - this.enter.price));
+        
 
         if (this.exit) {
             const exit = (this.exit.price) * (1 - fee)
+            console.log("Exit Fee: " + (exit - this.exit.price));
             return exit - entrance
         } else {
             return 0

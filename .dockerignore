@@ -1,4 +1,4 @@
-# API Keys
+#API keys
 keys.rtf
 
 # Logs
@@ -42,3 +42,4 @@ jspm_packages
 .node_repl_history
 
 .DS_Store
+
